@@ -3,13 +3,20 @@
 WiFiClient client;
 WiFiServer server(80);
 
-#define led1 D5
-#define led2 D6
+#define room1led1 D0
+#define room1led2 D1
+#define room1fan1 D2
+#define room1fan2 D3
+#define room2led1 D4
+#define room2led2 D5
+#define room2fan1 D6
+#define room2fan2 D7
+
 
 void setup()
 {
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  Serial.begin(9600);
   WiFi.begin("Mooazam", "mooazam123");
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -20,8 +27,14 @@ void setup()
   Serial.println("NodeMCU is connected!");
   Serial.println(WiFi.localIP());
   server.begin();
-  pinMode(led1, OUTPUT);
-  pinMode(led2, OUTPUT);
+  pinMode(room1led1, OUTPUT);
+  pinMode(room1led2, OUTPUT);
+  pinMode(room1fan1, OUTPUT);
+  pinMode(room1fan2, OUTPUT);
+  pinMode(room2led1, OUTPUT);
+  pinMode(room2led2, OUTPUT);
+  pinMode(room2fan1, OUTPUT);
+  pinMode(room2fan2, OUTPUT);
 }
 
 void loop()
@@ -33,26 +46,87 @@ void loop()
     String request =  client.readStringUntil('\n');
     Serial.println(request);
     request.trim();
-    if (request == "GET /led1on HTTP/1.1")
+    if (request == "GET /room1led1on HTTP/1.1")
     {
-      digitalWrite(led1, HIGH);
-      Serial.println("LED 1 is ON");
+      digitalWrite(room1led1, HIGH);
+      Serial.println("ROOM1 LED 1 is ON");
     }
-    if (request == "GET /led1off HTTP/1.1")
+    if (request == "GET /room1led1off HTTP/1.1")
     {
-      digitalWrite(led1, LOW);
-      Serial.println("LED 1 is OFF");
+      digitalWrite(room1led1, LOW);
+      Serial.println("ROOM1 LED 1 is OFF");
     }
-    if (request == "GET /led2on HTTP/1.1")
+    if (request == "GET /room1led2on HTTP/1.1")
     {
-      digitalWrite(led2, HIGH);
-      Serial.println("LED 2 is ON");
+      digitalWrite(room1led2, HIGH);
+      Serial.println("ROOM1 LED 2 is ON");
     }
-    if (request == "GET /led2off HTTP/1.1")
+    if (request == "GET /room1led2off HTTP/1.1")
     {
-      digitalWrite(led2, LOW);
-      Serial.println("LED 2 is OFF");
+      digitalWrite(room1led2, LOW);
+      Serial.println("ROOM1 LED 2 is OFF");
     }
+    if (request == "GET /room1fan1on HTTP/1.1")
+    {
+      digitalWrite(room1fan1, HIGH);
+      Serial.println("ROOM1 FAN 1 is ON");
+    }
+    if (request == "GET /room1fan1off HTTP/1.1")
+    {
+      digitalWrite(room1fan1, LOW);
+      Serial.println("ROOM1 FAN 1 is OFF");
+    }
+    if (request == "GET /room1fan2on HTTP/1.1")
+    {
+      digitalWrite(room1fan2, HIGH);
+      Serial.println("ROOM1 FAN 2 is ON");
+    }
+    if (request == "GET /room1fan2off HTTP/1.1")
+    {
+      digitalWrite(room2fan2, LOW);
+      Serial.println("ROOM2 FAN 2 is OFF");
+    }
+    if (request == "GET /room2led1on HTTP/1.1")
+    {
+      digitalWrite(room2led1, HIGH);
+      Serial.println("ROOM2 LED 1 is ON");
+    }
+    if (request == "GET /room2led1off HTTP/1.1")
+    {
+      digitalWrite(room2led1, LOW);
+      Serial.println("ROOM2 LED 1 is OFF");
+    }
+    if (request == "GET /room2led2on HTTP/1.1")
+    {
+      digitalWrite(room2led2, HIGH);
+      Serial.println("ROOM2 LED 2 is ON");
+    }
+    if (request == "GET /room2led2off HTTP/1.1")
+    {
+      digitalWrite(room2led2, LOW);
+      Serial.println("ROOM2 LED 2 is OFF");
+    }
+    if (request == "GET /room2fan1on HTTP/1.1")
+    {
+      digitalWrite(room2fan1, HIGH);
+      Serial.println("ROOM2 FAN 1 is ON");
+    }
+    if (request == "GET /room2fan1off HTTP/1.1")
+    {
+      digitalWrite(room2fan1, LOW);
+      Serial.println("ROOM2 FAN 1 is OFF");
+    }
+    if (request == "GET /room2fan2on HTTP/1.1")
+    {
+      digitalWrite(room2fan2, HIGH);
+      Serial.println("ROOM2 FAN 2 is ON");
+    }
+    if (request == "GET /room2fan2off HTTP/1.1")
+    {
+      digitalWrite(room2fan2, LOW);
+      Serial.println("ROOM2 FAN 2 is OFF");
+    }
+ 
   }
   client.println("HTTP/1.1 200 OK");
   client.println("Content-type:text/html");
@@ -72,57 +146,36 @@ void loop()
   client.println("<a href=\"/room1led1on\"\"><button>LED 1 ON</button></a>");
   client.println("<a href=\"/room1led1off\"\"><button>LED 1 OFF</button></a>");
   client.println("<br><br>");
-  client.println("<a href=\"/room1fan2on\"\"><button>FAN 2 ON</button></a>"); 
-  client.println("<a href=\"/room1fan2off\"\"><button>FAN 2 OFF</button></a>"); 
+  
+  client.println("<a href=\"/room1led2on\"\"><button>LED 2 ON</button></a>");
+  client.println("<a href=\"/room1led2off\"\"><button>LED 2 OFF</button></a>");
   client.println("<br><br>");
+  
+  client.println("<a href=\"/room1fan1on\"\"><button>FAN 1 ON</button></a>");
+  client.println("<a href=\"/room1fan1off\"\"><button>FAN 1 OFF</button></a>");
+  client.println("<br><br>");
+  
+  client.println("<a href=\"/room1fan2on\"\"><button>FAN 2 ON</button></a>");
+  client.println("<a href=\"/room1fan2off\"\"><button>FAN 2 OFF</button></a>");
+  client.println("<br><br>");
+  
   client.println("<h3>Room 2</h3>");
-  client.println("<a href=\"/room2led1on\"\"><button>LED 1 ON</button></a>"); 
-  client.println("<a href=\"/room2led1off\"\"><button>LED 1 OFF</button></a>"); 
-  client.println("<br><br>"); 
-  client.println("<a href=\"/room2led2on\"\"><button>LED 2 ON</button></a>"); 
-  client.println("<a href=\"/room2led2off\"\"><button>LED 2 OFF</button></a>"); 
-  client.println("<br><br>"); 
-  client.println("<a href=\"/room2fan1on\"\"><button>FAN 1 ON</button></a>"); 
-  client.println("<a href=\"/room2fan1off\"\"><button>FAN 1 OFF</button></a>"); 
+  
+  client.println("<a href=\"/room2led1on\"\"><button>LED 1 ON</button></a>");
+  client.println("<a href=\"/room2led1off\"\"><button>LED 1 OFF</button></a>");
   client.println("<br><br>");
-  client.println("<a href=\"/room2fan2off\"\"><button>FAN 2 OFF</button></a>");
-  client.println("<a href=\"/room2fan2on\"\"><button>FAN 2 ON</button></a>");
+  
+  client.println("<a href=\"/room2led2on\"\"><button>LED 2 ON</button></a>");
+  client.println("<a href=\"/room2led2off\"\"><button>LED 2 OFF</button></a>");
   client.println("<br><br>");
-  client.println("<h4>Room 3</h4>");
-  client.println("<a href=\"/room3led1on\"\"><button>LED 1 ON</button></a>");
-  client.println("<a href=\"/room3led1off\"\"><button>LED 1 OFF</button></a>");
+  
+  client.println("<a href=\"/room2fan1on\"\"><button>FAN 1 ON</button></a>");
+  client.println("<a href=\"/room2fan1off\"\"><button>FAN 1 OFF</button></a>");
   client.println("<br><br>");
-  client.println("<a href=\"/room3led2on\"\"><button>LED 2 ON</button></a>");
-  client.println("<a href=\"/room3led2off\"\"><button>LED 2 OFF</button></a>");
-  client.println("<br><br>");
-  client.println("<a href=\"/room3fan1on\"\"><button>FAN 1 ON</button></a>");
-  client.println("<a href=\"/room3fan1off\"\"><button>FAN 1 OFF</button></a>");
-  client.println("<br><br>");
-  client.println("<a href=\"/room3fan2on\"\"><button>FAN 2 ON</button></a>");
-  client.println("<a href=\"/room3fan2off\"\"><button>FAN 2 OFF</button></a>");
-  client.println("<br><br>");
-  client.println("<h3>Room 4</h3>");
-  client.println("<a href=\"/room4led1on\"\"><button>LED 1 ON</button></a>");
-  client.println("<a href=\"/room4led1off\"\"><button>LED 1 OFF</button></a>");
-  client.println("<br><br>");
-  client.println("<a href=\"/room4led2on\"\"><button>LED 2 ON</button></a>");
-  client.println("<a href=\"/room4led2off\"\"><button>LED 2 OFF</button></a>");
-  client.println("<br><br>");
-  client.println("<a href=\"/room4fan1on\"\"><button>FAN 1 ON</button></a>");
-  client.println("<a href=\"/room4fan1off\"\"><button>FAN 1 OFF</button></a>");
-  client.println("<br><br>");
-  client.println("<a href=\"/room4fan2on\"\"><button>FAN 2 ON</button></a>");
-  client.println("<a href=\"/room4fan2off\"\"><button>FAN 2 OFF</button></a>");
+  
+  client.println("<a href=\"/room2fan2on\"\"><button>FAN 2 OFF</button></a>");
+  client.println("<a href=\"/room2fan2off\"\"><button>FAN 2 ON</button></a>");
   client.println("<br><br>");
   client.println("</body>");
   client.println("</html>");
 }
- 
-  
-    
-    
-    
-    
-    
-    
-    
